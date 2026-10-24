@@ -1,0 +1,51 @@
+---
+import { initialTasks, taskStages } from '../lib/lab-model.mjs';
+const { uid = 'home' } = Astro.props;
+---
+
+<div class="task-demo" data-task-demo>
+  <div class="task-controls">
+    <label for={`${uid}-role`}>
+      Tu rol en la demo
+      <select id={`${uid}-role`} data-task-role>
+        <option value="developer">Desarrollador</option>
+        <option value="manager">Responsable</option>
+        <option value="admin">Administrador</option>
+      </select>
+    </label>
+    <button type="button" class="reset-control" data-reset-tasks>
+      Reiniciar tablero
+    </button>
+  </div>
+  <p class="role-explanation">
+    Cada rol puede avanzar una fase. Prueba una acción y comprueba el permiso.
+  </p>
+  <div class="task-board">
+    {taskStages.map((stage) => (
+      <section class="task-lane" data-task-lane={stage.id}>
+        <h3>
+          {stage.label}
+          <span data-lane-count>
+            {initialTasks().filter((task) => task.status === stage.id).length}
+          </span>
+        </h3>
+        <div data-lane-items>
+          {initialTasks()
+            .filter((task) => task.status === stage.id)
+            .map((task) => (
+              <article class="task-item">
+                <span>Funcionalidad</span>
+                <h4>{task.title}</h4>
+                <button type="button" data-task-action={task.id}>
+                  {stage.action}
+                </button>
+              </article>
+            ))}
+        </div>
+      </section>
+    ))}
+  </div>
+  <p class="demo-feedback" data-task-feedback aria-live="polite">
+    Elige una tarea para recorrer el flujo. Son datos de ejemplo.
+  </p>
+</div>

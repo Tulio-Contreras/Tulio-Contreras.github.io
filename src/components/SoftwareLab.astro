@@ -1,0 +1,119 @@
+---
+import TransferDemo from './TransferDemo.astro';
+import LibraryDemo from './LibraryDemo.astro';
+import TaskDemo from './TaskDemo.astro';
+const { initial = 'bank-app', uid = 'home', single = false } = Astro.props;
+const modes = [
+  { id: 'bank-app', label: 'Operaciones', name: 'Bank App' },
+  { id: 'sembook', label: 'Biblioteca', name: 'SemBook' },
+  { id: 'taskdev', label: 'Equipos', name: 'TaskDev' },
+];
+---
+
+<section
+  class="software-lab"
+  id={uid === 'home' ? 'laboratorio' : undefined}
+  data-software-lab
+  data-initial={initial}
+  aria-label="Laboratorio interactivo del portafolio"
+>
+  <div class="lab-chassis">
+    <div class="chassis-name">
+      <span class="chassis-symbol" aria-hidden="true"></span>
+      <strong>TC / SOFTWARE LAB</strong>
+    </div>
+    <span class="demo-badge">Demo local</span>
+  </div>
+  {!single && (
+    <div class="lab-channels" role="tablist" aria-label="Seleccionar demostración">
+      {modes.map((mode) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${uid}-tab-${mode.id}`}
+          aria-controls={`${uid}-panel-${mode.id}`}
+          aria-selected={mode.id === initial ? 'true' : 'false'}
+          tabindex={mode.id === initial ? 0 : -1}
+          data-lab-mode={mode.id}
+        >
+          <i aria-hidden="true"></i>
+          {mode.label}
+          <span>{mode.name}</span>
+        </button>
+      ))}
+    </div>
+  )}
+  <div class="lab-display">
+    {modes
+      .filter((mode) => !single || mode.id === initial)
+      .map((mode) => (
+        <div
+          id={`${uid}-panel-${mode.id}`}
+          role={!single ? 'tabpanel' : undefined}
+          aria-labelledby={!single ? `${uid}-tab-${mode.id}` : undefined}
+          data-lab-panel={mode.id}
+          hidden={mode.id !== initial}
+        >
+          {mode.id === 'bank-app' ? (
+            <TransferDemo uid={uid} />
+          ) : mode.id === 'sembook' ? (
+            <LibraryDemo uid={uid} />
+          ) : (
+            <TaskDemo uid={uid} />
+          )}
+        </div>
+      ))}
+    <div class="signal-panel" aria-label="Recorrido de la última acción">
+      <div class="signal-header">
+        <span>RECORRIDO DE LA ACCIÓN</span>
+        <output data-trace-state>LISTO</output>
+      </div>
+      <ol class="trace-stages">
+        <li data-trace-step="0">
+          <span></span>Interfaz
+        </li>
+        <li data-trace-step="1">
+          <span></span>Validación
+        </li>
+        <li data-trace-step="2">
+          <span></span>Estado
+        </li>
+        <li data-trace-step="3">
+          <span></span>Respuesta
+        </li>
+      </ol>
+      <svg
+        class="state-trace"
+        viewBox="0 0 600 60"
+        role="img"
+        aria-label="Indicador de fases de la acción local"
+      >
+        <path
+          class="trace-grid"
+          d="M0 15H600M0 30H600M0 45H600M60 0V60M120 0V60M180 0V60M240 0V60M300 0V60M360 0V60M420 0V60M480 0V60M540 0V60"
+        />
+        <polyline data-trace-line points="0,43 600,43" />
+      </svg>
+      <details class="response-details">
+        <summary>Inspeccionar el resultado</summary>
+        <pre><code data-response>Selecciona una demo y realiza una acción.</code></pre>
+      </details>
+    </div>
+  </div>
+  <div class="lab-foot">
+    <span>Interfaz + reglas + datos</span>
+    <p>
+      Implementaciones creadas para este portafolio. Funcionan en tu navegador con datos de ejemplo.
+    </p>
+  </div>
+  <noscript>
+    <p class="noscript-notice">
+      Activa JavaScript para operar el laboratorio. Los proyectos y sus explicaciones se pueden leer
+      sin JavaScript.
+    </p>
+  </noscript>
+</section>
+<script>
+  import { setupLabs } from '../scripts/lab-controller';
+  setupLabs();
+</script>

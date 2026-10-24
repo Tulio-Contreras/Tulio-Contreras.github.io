@@ -1,0 +1,177 @@
+---
+import '../styles/global.css';
+import Arrow from './Arrow.astro';
+const {
+  title = 'Tulio Contreras | Desarrollador Full-Stack · Laravel, React y Next.js',
+  description = 'Tulio Contreras, Desarrollador Full-Stack en Venezuela. Explora proyectos con Laravel, React, Next.js y Django, demos interactivas y decisiones de código.',
+  schema = [],
+  noindex = false,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const person = {
+  '@type': 'Person',
+  '@id': `${Astro.site}#tulio`,
+  name: 'Tulio Andrés Contreras Aza',
+  alternateName: 'Tulio Contreras',
+  jobTitle: 'Desarrollador Full-Stack',
+  url: Astro.site,
+  email: 'mailto:tuliocontreras06@gmail.com',
+  homeLocation: { '@type': 'Place', name: 'San Cristóbal, Venezuela' },
+  sameAs: [
+    'https://github.com/Tulio-Contreras',
+    'https://www.linkedin.com/in/tulio-andres-contreras-aza-3710b62a4/',
+  ],
+  knowsAbout: ['Laravel', 'React', 'Next.js', 'TypeScript', 'Django', 'SQL'],
+};
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    person,
+    {
+      '@type': 'WebSite',
+      '@id': `${Astro.site}#website`,
+      url: Astro.site,
+      name: 'Tulio Contreras — Software Lab',
+      inLanguage: 'es',
+      author: { '@id': person['@id'] },
+    },
+    ...schema,
+  ],
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#eeeee7" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_LA" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og-cover.png', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Tulio Contreras, Desarrollador Full-Stack. Software que puedes poner a prueba."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og-cover.png', Astro.site)} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/Manrope.ttf" as="font" type="font/ttf" crossorigin />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">
+      Saltar al contenido
+    </a>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="wordmark" href="/" aria-label="Tulio Contreras, inicio">
+          <span class="brand-mark" aria-hidden="true">
+            tc<span>.</span>
+          </span>
+          <span>
+            Tulio Contreras<small>Desarrollador Full-Stack</small>
+          </span>
+        </a>
+        <nav class="desktop-nav" aria-label="Navegación principal">
+          <a href="/#laboratorio">Laboratorio</a>
+          <a href="/proyectos/">Proyectos</a>
+          <a href="/#sobre-mi">Sobre mí</a>
+        </nav>
+        <a class="header-contact" href="mailto:tuliocontreras06@gmail.com">
+          Hablemos <Arrow />
+        </a>
+        <details class="navigation">
+          <summary aria-label="Menú principal">
+            <span>Menú</span>
+            <span class="menu-lines" aria-hidden="true"></span>
+          </summary>
+          <nav aria-label="Navegación móvil">
+            <a href="/#laboratorio">
+              Laboratorio <Arrow />
+            </a>
+            <a href="/proyectos/">
+              Proyectos <Arrow />
+            </a>
+            <a href="/#sobre-mi">
+              Sobre mí <Arrow />
+            </a>
+            <a href="/#contacto">
+              Contacto <Arrow />
+            </a>
+            <a href="/CV_Tulio_Contreras.pdf" target="_blank" rel="noopener">
+              Ver CV <Arrow />
+            </a>
+          </nav>
+        </details>
+      </header>
+      <main id="contenido">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <a href="/" class="footer-signature">
+          Tulio Contreras
+        </a>
+        <span>Full-Stack · San Cristóbal, Venezuela</span>
+        <div>
+          <a href="https://github.com/Tulio-Contreras" target="_blank" rel="noopener noreferrer">
+            GitHub <Arrow />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/tulio-andres-contreras-aza-3710b62a4/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn <Arrow />
+          </a>
+        </div>
+        <span>© {new Date().getFullYear()}</span>
+      </footer>
+    </div>
+    <script>
+      document
+        .querySelectorAll('.navigation a')
+        .forEach((link) =>
+          link.addEventListener('click', () =>
+            document.querySelector('.navigation')?.removeAttribute('open'),
+          ),
+        );
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          const menu = document.querySelector<HTMLDetailsElement>('.navigation[open]');
+          if (menu) {
+            menu.open = false;
+            menu.querySelector('summary')?.focus();
+          }
+        }
+      });
+      document.querySelectorAll('[data-copy-email]').forEach((button) =>
+        button.addEventListener('click', async () => {
+          const feedback = document.querySelector('[data-copy-feedback]');
+          try {
+            await navigator.clipboard.writeText('tuliocontreras06@gmail.com');
+            if (feedback) feedback.textContent = 'Correo copiado.';
+          } catch {
+            if (feedback)
+              feedback.textContent =
+                'Selecciona el correo o usa el enlace para abrir tu aplicación de correo.';
+          }
+        }),
+      );
+    </script>
+  </body>
+</html>

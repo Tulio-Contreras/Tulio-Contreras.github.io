@@ -1,0 +1,61 @@
+---
+import Arrow from './Arrow.astro';
+const { uid = 'home' } = Astro.props;
+---
+
+<div class="transfer-demo" data-transfer-demo>
+  <div class="wallet-accounts">
+    <div>
+      <span class="account-name">
+        <i aria-hidden="true">A</i> Cuenta de origen
+      </span>
+      <strong data-sender>$ 1.250,00</strong>
+    </div>
+    <span class="account-arrow" aria-hidden="true">
+      <Arrow />
+    </span>
+    <div>
+      <span class="account-name">
+        <i aria-hidden="true">B</i> Cuenta de destino
+      </span>
+      <strong data-recipient>$ 300,00</strong>
+    </div>
+  </div>
+  <form class="transfer-form" novalidate>
+    <label for={`${uid}-amount`}>
+      Cantidad de la operación <span>USD de ejemplo</span>
+    </label>
+    <div class="amount-control">
+      <span aria-hidden="true">$</span>
+      <input
+        id={`${uid}-amount`}
+        name="amount"
+        type="text"
+        inputmode="decimal"
+        value="75,00"
+        autocomplete="off"
+        aria-describedby={`${uid}-transfer-feedback`}
+      />
+      <button type="submit">
+        Simular envío <Arrow />
+      </button>
+    </div>
+    <p
+      class="demo-feedback"
+      id={`${uid}-transfer-feedback`}
+      data-transfer-feedback
+      aria-live="polite"
+    >
+      Cambia el importe y observa qué sucede con el saldo.
+    </p>
+  </form>
+  <div class="transaction-line">
+    <h3>Historial de esta sesión</h3>
+    <button class="reset-control" type="button" data-reset-wallet>
+      Reiniciar
+    </button>
+  </div>
+  <ol class="transaction-history" data-transactions>
+    <li class="empty-history">Todavía no hay operaciones. Puedes hacer la primera.</li>
+  </ol>
+</div>

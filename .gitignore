@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.impeccable/
+PRODUCT.md
+CONTENIDO_Y_ESTRUCTURA.md
+.env
+.env.*
+!.env.example
+*.log

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tulio-contreras.github.io/sitemap.xml

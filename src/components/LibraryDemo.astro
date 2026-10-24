@@ -1,0 +1,57 @@
+---
+import { books } from '../lib/lab-model.mjs';
+const { uid = 'home' } = Astro.props;
+---
+
+<div class="library-demo" data-library-demo>
+  <div class="library-search">
+    <label for={`${uid}-book-query`}>Busca por título o autor</label>
+    <input
+      id={`${uid}-book-query`}
+      type="search"
+      placeholder="Prueba con Mary Shelley"
+      autocomplete="off"
+      data-book-query
+    />
+  </div>
+  <div class="library-toolbar">
+    <p data-book-count aria-live="polite">
+      4 libros de ejemplo
+    </p>
+    <button type="button" data-only-favorites aria-pressed="false">
+      Mis favoritos <span data-favorite-count>0</span>
+    </button>
+  </div>
+  <div class="book-shelf">
+    {books.map((book) => (
+      <article class={`book-item book-${book.color}`} data-book-id={book.id}>
+        <div class="book-cover" aria-hidden="true">
+          <span>{book.mark}</span>
+          <small>{book.author}</small>
+        </div>
+        <div class="book-info">
+          <h3>{book.title}</h3>
+          <p>{book.author}</p>
+          <button
+            type="button"
+            data-favorite={book.id}
+            aria-pressed="false"
+            aria-label={`Guardar ${book.title}`}
+          >
+            Guardar <span aria-hidden="true">+</span>
+          </button>
+        </div>
+      </article>
+    ))}
+  </div>
+  <div class="library-empty" data-book-empty hidden>
+    <h3>No hay libros en esta vista.</h3>
+    <p>Prueba otro título o vuelve a la biblioteca completa.</p>
+    <button type="button" data-reset-books>
+      Ver todos los libros
+    </button>
+  </div>
+  <p class="storage-status" data-storage-status>
+    Los favoritos se guardan en este navegador. El catálogo de esta demo es local.
+  </p>
+</div>
